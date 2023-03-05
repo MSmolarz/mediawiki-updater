@@ -6,9 +6,9 @@
 # +VARIABLES
 #TODO SKIP_RC_RELEASE=true
 BACKUP_MYSQL_DB=true
-MEDIAWIKIDIR=/home/gpunktschmitz/www/mediawiki_local/public2
-BACKUPDIR=/home/gpunktschmitz/BACKUP/GPUNKTMEDIAWIKIUPDATER
-TMPDIR=/tmp/GPUNKTMEDIAWIKIUPDATERTMP
+MEDIAWIKIDIR=/opt/lampp/htdocs/mediawiki
+BACKUPDIR=/opt/lampp/htdocs/backup
+TMPDIR=/tmp/mediawikiupdate-tmp
 #--
 AWKEXECUTABLE=$(which awk)
 BASENAMEEXECUTABLE=$(which basename)
@@ -17,8 +17,8 @@ BASENAMEEXECUTABLE=$(which basename)
 GREPEXECUTABLE=$(which grep)
 HEADEXECUTABLE=$(which head)
 MKDIREXECUTABLE=$(which mkdir)
-MYSQLDUMPEXECUTABLE=$(which mysqldump)
-PHPEXECUTABLE=$(which php)
+MYSQLDUMPEXECUTABLE=/opt/lampp/bin/mysqldump
+PHPEXECUTABLE=/opt/lampp/bin/php
 SEDEXECUTABLE=$(which sed)
 TAREXECUTABLE=$(which tar)
 WGETEXECUTABLE=$(which wget)
