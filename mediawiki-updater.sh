@@ -142,6 +142,9 @@ if testvercomp ${LATEST_RELEASE} ">" ${INSTALLED_VERSION}; then
     exit 1
 fi
 
+read -p "Soll das Update gestartet werde? [y/n]:" name
+if [ "$name" = "y" ]; then
+
 #if tmp directory exists delete it/append "_{int}"
 if [ -d ${TMPDIR} ]; then
     COUNTER=1
@@ -253,5 +256,6 @@ rm -r ${TMPDIR}
 #TODO chown
 
 #execute update script
-${PHPEXECUTABLE} ${MEDIAWIKIDIR}/maintenance/update.php 
+${PHPEXECUTABLE} ${MEDIAWIKIDIR}/maintenance/update.php
+fi
 # -PROCESS
