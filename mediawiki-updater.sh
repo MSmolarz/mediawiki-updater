@@ -168,7 +168,7 @@ if [ ! -d ${BACKUPDIR} ]; then
 fi
 
 #create backup timestamp directory
-TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+TIMESTAMP=$(date +%Y-%m-%d_%H%M%S)
 BACKUPBASEDIR=${BACKUPDIR}
 BACKUPDIR="${BACKUPDIR}/${TIMESTAMP}"
 if [ ! -d ${BACKUPDIR} ]; then
@@ -220,35 +220,35 @@ fi
 
 #copy LocalSettings.php to new version
 echo "copying LocalSettings.php from previous version"
-cp ${BACKUPDIR}/${INSTALLED_VERSION}/LocalSettings.php ${MEDIAWIKIDIR}/LocalSettings.php
+cp -a ${BACKUPDIR}/${INSTALLED_VERSION}/LocalSettings.php ${MEDIAWIKIDIR}/LocalSettings.php
 
 #copy images from old installation to new version
 echo "copying images from previous version"
 cp -a ${BACKUPDIR}/${INSTALLED_VERSION}/images ${MEDIAWIKIDIR}
 
 #copy skins from old installation to new version
-echo "copying skins from previous version"
-for SKINPATH in `ls -d ${BACKUPDIR}/${INSTALLED_VERSION}/skins/*/`; do
-    SKINNAME=$(${BASENAMEEXECUTABLE} ${SKINPATH})
-    if [ ! -d ${MEDIAWIKIDIR}/skins/${SKINNAME} ]; then
-        cp -a ${SKINPATH} ${MEDIAWIKIDIR}/skins
-    fi
-done
+#echo "copying skins from previous version"
+#for SKINPATH in `ls -d ${BACKUPDIR}/${INSTALLED_VERSION}/skins/*/`; do
+#    SKINNAME=$(${BASENAMEEXECUTABLE} ${SKINPATH})
+#    if [ ! -d ${MEDIAWIKIDIR}/skins/${SKINNAME} ]; then
+#        cp -a ${SKINPATH} ${MEDIAWIKIDIR}/skins
+#    fi
+#done
 
 #copy extensions from old installation if not existing in new version
-echo "copying extensions from previous version"
-for EXTENSIONPATH in `ls -d ${BACKUPDIR}/${INSTALLED_VERSION}/extensions/*/`; do
-    EXTENSIONNAME=$(${BASENAMEEXECUTABLE} ${EXTENSIONPATH})
-    if [ ! -d ${MEDIAWIKIDIR}/extensions/${EXTENSIONNAME} ]; then
-        cp -a ${EXTENSIONPATH} ${MEDIAWIKIDIR}/extensions
-    fi
-done
+#echo "copying extensions from previous version"
+#for EXTENSIONPATH in `ls -d ${BACKUPDIR}/${INSTALLED_VERSION}/extensions/*/`; do
+#    EXTENSIONNAME=$(${BASENAMEEXECUTABLE} ${EXTENSIONPATH})
+#    if [ ! -d ${MEDIAWIKIDIR}/extensions/${EXTENSIONNAME} ]; then
+#        cp -a ${EXTENSIONPATH} ${MEDIAWIKIDIR}/extensions
+#    fi
+#done
 
 #remove old backup directory
-echo "removing old backups (keeping last 3)"
-for OLDBACKUPDIR in `ls -t -d ${BACKUPBASEDIR}/*/ | ${GREPEXECUTABLE} -v "$(ls -t ${BACKUPBASEDIR}/ | ${HEADEXECUTABLE} -3)"`; do
-    rm -r ${OLDBACKUPDIR}
-done
+#echo "removing old backups (keeping last 3)"
+#for OLDBACKUPDIR in `ls -t -d ${BACKUPBASEDIR}/*/ | ${GREPEXECUTABLE} -v "$(ls -t ${BACKUPBASEDIR}/ | ${HEADEXECUTABLE} -3)"`; do
+#    rm -r ${OLDBACKUPDIR}
+#done
 
 #remove tmp directory
 rm -r ${TMPDIR}
