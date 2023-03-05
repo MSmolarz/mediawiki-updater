@@ -68,10 +68,14 @@ testvercomp () {
     if [[ $op != $2 ]]
     then
         return 0
+        echo 0
     else
         return 1
+        echo 1
     fi
 }
+
+FNAME=`date +%Y-%m-%d`
 
 backupmysqldb () {
     DB_TYPE=$(${GREPEXECUTABLE} -n "wgDBtype =" ${MEDIAWIKIDIR}/LocalSettings.php | $AWKEXECUTABLE -F '"' '{print $2}')
@@ -87,13 +91,19 @@ backupmysqldb () {
         local DB_PW=$(${GREPEXECUTABLE} "wgDBpassword =" ${MEDIAWIKIDIR}/LocalSettings.php)
         local DB_PW=${DB_PW:17:-2}
 
+	sed -i 's/#$wgReadOnly/$wgReadOnly/' /${MEDIAWIKIDIR}/LocalSettings.php
         echo "backing up database to '${BACKUPDIR}/${DB_NAME}.sql'"
-        ${MYSQLDUMPEXECUTABLE} -u ${DB_USER} -p${DB_PW} ${DB_NAME} > ${BACKUPDIR}/${DB_NAME}.sql
+	${MYSQLDUMPEXECUTABLE} -u ${DB_USER} -p${DB_PW} ${DB_NAME} > ${BACKUPDIR}/${DB_NAME}.sql
+	sed -i 's/$wgReadOnly/#$wgReadOnly/' /${MEDIAWIKIDIR}/LocalSettings.php
+        #${MYSQLDUMPEXECUTABLE} -u ${DB_USER} -p${DB_PW} --databases ${DB_NAME} --add-drop-table -B > ${BACKUPDIR}/${FNAME}.sql
+        #zip -r ${BACKUPDIR}/${FNAME}.zip ${MEDIAWIKIDIR}/images/ ${BACKUPDIR}/${FNAME}.sql ${MEDIAWIKIDIR}/LocalSettings.php ${MEDIAWIKIDIR}/extensions/
+        #rm ${BACKUPDIR}/${FNAME}.sql
     else
         echo "database type is not 'mysql' (set BACKUP_MYSQL_DB to 'false' to continue without a backup created by this script) -> exiting"
         exit 1
     fi
 }
+
 # -FUNCTIONS
 
 # +PROCESS
