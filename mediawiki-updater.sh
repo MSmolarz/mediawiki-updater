@@ -114,7 +114,7 @@ if [ ! -f ${MEDIAWIKIDIR}/LocalSettings.php ]; then
 fi
 
 #get mediawiki version from MEDIAWIKIDIR
-INSTALLED_VERSION=$(${GREPEXECUTABLE} -n "wgVersion =" ${MEDIAWIKIDIR}/includes/DefaultSettings.php | ${AWKEXECUTABLE} -F "'" '{print $2}')
+INSTALLED_VERSION=$(${GREPEXECUTABLE} -n "'MW_VERSION'" ${MEDIAWIKIDIR}/includes/Defines.php | ${AWKEXECUTABLE} '{print $3}' | tr -d "'")
 echo "currently installed version: ${INSTALLED_VERSION}"
 
 LATEST_RELEASE=${INSTALLED_VERSION}
@@ -125,9 +125,11 @@ for RELEASE in ${LATEST_RELEASES}; do
     if [[ "${RELEASE}" =~ [0-9] ]]; then
 	#skip if release candidate
         if ! ${GREPEXECUTABLE} "\-rc\." <<< ${RELEASE} &>/dev/null; then
+        if ! ${GREPEXECUTABLE} "wmf" <<< ${RELEASE} &>/dev/null; then
             if testvercomp ${RELEASE} "<" ${LATEST_RELEASE}; then
                 LATEST_RELEASE=${RELEASE}
             fi
+	fi
         fi
     fi
 done
